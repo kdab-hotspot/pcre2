@@ -68,7 +68,7 @@
 # 2013-11-05 PH added support for PARENS_NEST_LIMIT
 # 2014-08-29 PH converted the file for PCRE2 (which has no C++).
 
-PROJECT(PCRE2 C)
+PROJECT(pcre2 C)
 
 # Increased minimum to 2.8.0 to support newer add_test features. Set policy
 # CMP0026 to avoid warnings for the use of LOCATION in GET_TARGET_PROPERTY.
@@ -761,5 +761,20 @@ IF(PCRE2_SHOW_REPORT)
 
   MESSAGE(STATUS "")
 ENDIF(PCRE2_SHOW_REPORT)
+
+string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_TYPE)
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/TargetArch.cmake)
+target_architecture(ARCH)
+
+string(TOLOWER ${CMAKE_SYSTEM_PROCESSOR} ARCH)
+string(TOLOWER ${CMAKE_SYSTEM_NAME} OS)
+set(ARCHIVE "${PROJECT_NAME}-${ARCH}-${OS}-${BUILD_TYPE}")
+set(CPACK_PACKAGE_FILE_NAME ${ARCHIVE})
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+set(CPACK_OUTPUT_FILE_PREFIX ${CMAKE_INSTALL_PREFIX})
+
+include(CPack)
 
 # end CMakeLists.txt
